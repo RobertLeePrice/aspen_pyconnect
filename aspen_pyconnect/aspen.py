@@ -52,7 +52,7 @@ class IP21Connector(object):
                 update_end_time += relativedelta.relativedelta(seconds=(period_in_seconds * pull_limit))
 
                 sql = """
-                        SELECT LOCAL_ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
+                        SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
                         WHERE name='{tag_name}' AND ts 
                         BETWEEN '{start_time}' AND '{end_time}' AND request={request} AND period={period} 
                         AND stepped={stepped}
@@ -74,7 +74,7 @@ class IP21Connector(object):
         else:
 
             sql = """
-                    SELECT LOCAL_ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
+                    SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
                     WHERE name='{tag_name}' AND ts 
                     BETWEEN '{start_time}' AND '{end_time}'  AND request={request} AND period={period}
                 """.format(
@@ -93,7 +93,7 @@ class IP21Connector(object):
     def get_value(self, name, timestamp=datetime.now()):
         timestamp = py_to_aspen_dt(timestamp)
 
-        sql = """SELECT ts AS "time", value FROM history WHERE name='{name}' 
+        sql = """SELECT ISO8601(ts) AS "utc_time", value FROM history WHERE name='{name}' 
             AND ts='{timestamp}' AND request=2""".format(name=name, timestamp=timestamp)
 
         result = self.client.service.ExecuteSQL(sql)
@@ -102,7 +102,7 @@ class IP21Connector(object):
 
     def get_last_actual_value(self, name):
 
-        sql = """SELECT ts AS "time", value FROM history WHERE name='{name}'
+        sql = """SELECT ISO8601(ts) AS "utc_time", value FROM history WHERE name='{name}'
             AND ts > (SELECT ISO8601(ts, 0) FROM history WHERE name='{name}' AND request=4)
             AND request=4""".format(name=name)
 

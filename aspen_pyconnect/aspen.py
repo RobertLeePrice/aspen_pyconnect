@@ -70,7 +70,7 @@ class IP21Connector(object):
 
                 sql = """
                         SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
-                        WHERE name='{tag_name}' AND ts > '{start_time}' AND <= '{end_time}' 
+                        WHERE name='{tag_name}' AND ts > '{start_time}' AND ts <= '{end_time}' 
                         AND request={request} AND period={period} AND stepped={stepped}
                     """.format(
                             tag_name=tag_name,
@@ -91,7 +91,7 @@ class IP21Connector(object):
 
             sql = """
                     SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
-                    WHERE name='{tag_name}' AND ts > '{start_time}' AND <= '{end_time}'  
+                    WHERE name='{tag_name}' AND ts > '{start_time}' AND ts <= '{end_time}'  
                     AND request={request} AND period={period} AND stepped={stepped}
                 """.format(
                 tag_name=tag_name,

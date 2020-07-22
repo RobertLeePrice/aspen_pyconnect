@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='aspen_pyconnect',
-    version='0.1.10',
+    version='0.1.11',
     description='A wrapper for accessing data from Aspen IP.21.',
     url='https://github.com/RobertLeePrice',
     author='Robert Price, Jose Roberts, Arpan Seth',

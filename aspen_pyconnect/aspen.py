@@ -32,8 +32,11 @@ class IP21Connector(object):
         return pydt.strftime('%d-%b-%y %H:%M:%S').upper()
     
     @staticmethod
-    def calculate_points_in_time_range(start_time, end_time, period):
-        period_in_seconds = (datetime.strptime(period, '%H:%M:%S') - datetime(1900, 1, 1)).total_seconds()
+    def calculate_period_in_seconds(period):
+        return (datetime.strptime(period, '%H:%M:%S') - datetime(1900, 1, 1)).total_seconds()
+
+    @staticmethod
+    def calculate_points_in_time_range(start_time, end_time, period_in_seconds):
         return ceil((end_time - start_time).total_seconds() / period_in_seconds)
     
     @staticmethod
@@ -53,7 +56,8 @@ class IP21Connector(object):
         start_time = self.remove_timezone(start_time)
         end_time = self.remove_timezone(end_time)
 
-        num_points = self.calculate_points_in_time_range(start_time, end_time, period)
+        period_in_seconds = self.calculate_period_in_seconds(period)
+        num_points = self.calculate_points_in_time_range(start_time, end_time, period_in_seconds)
 
         if num_points >= pull_limit:
 

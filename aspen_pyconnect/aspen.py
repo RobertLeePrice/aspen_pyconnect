@@ -70,9 +70,8 @@ class IP21Connector(object):
 
                 sql = """
                         SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
-                        WHERE name='{tag_name}' AND ts 
-                        BETWEEN '{start_time}' AND '{end_time}' AND request={request} AND period={period} 
-                        AND stepped={stepped}
+                        WHERE name='{tag_name}' AND ts > '{start_time}' AND <= '{end_time}' 
+                        AND request={request} AND period={period} AND stepped={stepped}
                     """.format(
                             tag_name=tag_name,
                             start_time=self.convert_to_aspen_dt(update_start_time),
@@ -92,14 +91,15 @@ class IP21Connector(object):
 
             sql = """
                     SELECT ISO8601(ts) AS "utc_time", name AS tag_name, value FROM history(80)
-                    WHERE name='{tag_name}' AND ts 
-                    BETWEEN '{start_time}' AND '{end_time}'  AND request={request} AND period={period}
+                    WHERE name='{tag_name}' AND ts > '{start_time}' AND <= '{end_time}'  
+                    AND request={request} AND period={period} AND stepped={stepped}
                 """.format(
                 tag_name=tag_name,
                 start_time=self.convert_to_aspen_dt(start_time),
                 end_time=self.convert_to_aspen_dt(end_time),
                 period=period,
-                request=request)
+                request=request,
+                stepped=stepped)
 
             result = self.client.service.ExecuteSQL(sql)
 
